@@ -1,0 +1,22 @@
+name: Build docker image
+
+on:
+  workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Docker Login
+        run: docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}} ${{secrets.DOCKER_REGISTRY}}
+      - name: Build image with XSK
+        run: |
+          BASEIMAGE=dirigiblelabs/xsk
+          WS_PATH=/usr/local/tomcat/target/dirigible/repository/root/users/dirigible/workspace/
+          PROJECTNAME=$(basename $GITHUB_REPOSITORY)
+          DOCKERREF={{secrets.DOCKER_REGISTRY}}/$PROJECTNAME
+          echo -e "FROM $BASEIMAGE\nADD . $WS_PATH/$PROJECTNAME" | docker build . -f - -t $DOCKERREF
+          docker push $DOCKERREF
