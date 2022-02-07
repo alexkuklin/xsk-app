@@ -15,7 +15,7 @@ jobs:
       - name: Build image with XSK
         run: |
           BASEIMAGE=dirigiblelabs/xsk
-          WS_PATH=/usr/local/tomcat/target/dirigible/repository/root/users/dirigible/workspace/
+          WS_PATH=/usr/local/tomcat/target/dirigible/repository/root/registry/public/
           PROJECTNAME=$(basename $GITHUB_REPOSITORY)
           DOCKERREF=${{secrets.DOCKER_REGISTRY}}/$GITHUB_REPOSITORY/xsk
           echo -e "FROM $BASEIMAGE\nADD . $WS_PATH/$PROJECTNAME" | docker build . -f - -t $DOCKERREF
@@ -23,7 +23,7 @@ jobs:
       - name: Build image with XSK-KYMA
         run: |
           BASEIMAGE=dirigiblelabs/xsk-kyma
-          WS_PATH=/usr/local/tomcat/target/dirigible/repository/root/users/dirigible/workspace/
+          WS_PATH=/usr/local/tomcat/target/dirigible/repository/root/registry/public/
           PROJECTNAME=$(basename $GITHUB_REPOSITORY)
           DOCKERREF=${{secrets.DOCKER_REGISTRY}}/$GITHUB_REPOSITORY/xsk-kyma
           echo -e "FROM $BASEIMAGE\nADD . $WS_PATH/$PROJECTNAME" | docker build . -f - -t $DOCKERREF
